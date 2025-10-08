@@ -1,200 +1,362 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Key Terms and Definitions — List + Separate Practice</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Key Terms and Definitions — List + Practice</title>
+</head>
+<body style="margin:0; font-family:Arial, Helvetica, sans-serif; color:#0F172A; background:#ffffff; line-height:1.7; font-size:1.05rem;">
 
-  <!-- Match FAQ typography -->
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&amp;display=swap" rel="stylesheet">
+  <!-- Banner -->
+  <div style="background:#555960; color:#ffffff;">
+    <div style="width:100%; max-width:1140px; margin:0 auto; padding:0 8px;">
+      <div role="heading" aria-level="1"
+           style="display:flex; align-items:center; gap:.4rem; padding:.7rem 0; margin:0; text-transform:uppercase; letter-spacing:.06em; font-weight:800; font-size:1.6rem;">
+        <span id="pageTitle">Key Terms and Definitions</span>
+      </div>
+    </div>
+  </div>
 
-  <style>
-    /* ===== Match FAQ.html palette & components ===== */
-    :root{
-      --pg-gold:#CFB991;        /* Boilermaker Gold */
-      --pg-steel:#555960;       /* Dark banner */
-      --surface:#F7F1E5;        /* light gold tint */
-      --surface-hover:#EFE6D4;  /* hover tint */
-      --border:#E2E8F0;
-      --text:#0F172A;
-      --shadow:0 .25rem .75rem rgba(0,0,0,.06);
-    }
+  <main style="width:100%; max-width:1140px; margin:0 auto; padding:0 8px;">
+    <p style="color:#475569; margin:1rem 0 1.25rem;">Search, browse, or switch to practice mode.</p>
 
-    body{ font-family:'Lato', Arial, sans-serif; color:var(--text); line-height:1.7; font-size:1.05rem; background:#fff; margin:0; }
-    .container{ width:100%; max-width:1140px; margin:0 auto; padding-left:8px; padding-right:8px; }
+    <!-- Toolbar -->
+    <div id="toolbar" role="toolbar" aria-label="Actions"
+         style="display:flex; gap:.5rem; flex-wrap:wrap; margin: 1rem 0;">
+      <input id="searchInput" type="search" placeholder="Search term…" aria-label="Search term"
+             style="max-width:420px; min-width:260px; padding:.5rem .75rem; border:1px solid #E2E8F0; border-radius:.5rem;" />
+      <button id="searchBtn" type="button" title="Search for a term"
+              style="border:1px solid #E2E8F0; background:#ffffff; color:#0F172A; padding:.5rem .75rem; border-radius:.5rem; font-weight:700; cursor:pointer;">
+        Search
+      </button>
+      <button id="clearSearch" type="button" title="Close search and show all terms"
+              style="display:none; border:1px solid #E2E8F0; background:#ffffff; color:#0F172A; padding:.5rem .75rem; border-radius:.5rem; font-weight:700; cursor:pointer;">
+        Close Search
+      </button>
+      <button id="goPractice" type="button" title="Go to Practice Exercises"
+              style="background:#CFB991; color:#111111; border:0; padding:.5rem .75rem; border-radius:.5rem; font-weight:800; cursor:pointer;">
+        Practice Exercises
+      </button>
+    </div>
 
-    /* Header banner (same as FAQ) */
-    .banner-bleed{ background:var(--pg-steel); color:#fff; }
-    .banner{ display:flex; width:100%; align-items:center; gap:.4rem; padding:.55rem 0; margin:0; text-transform:uppercase; letter-spacing:.06em; font-weight:800; }
-    .banner .faq-icon{ width:20px; height:20px; flex:0 0 auto; }
-    .banner .title-text{ font-size:1.5rem; }
-    @media (min-width:768px){ .banner .title-text{ font-size:1.7rem; } }
+    <!-- LIST SCREEN -->
+    <section id="screen-list" aria-label="Term list">
+      <div id="list" aria-live="polite" style="display:grid; gap:.75rem;"></div>
+    </section>
 
-    .page-subtitle{ color:#475569; margin:1rem 0 1.25rem; }
+    <!-- PRACTICE SCREEN -->
+    <section id="screen-practice" aria-labelledby="practiceHeading" style="display:none;">
+      <h2 id="practiceHeading" style="margin:10px 0; color:#475569;">Practice Exercises</h2>
 
-    /* Controls (mirrors FAQ toolbar) */
-    .faq-toolbar{ display:flex; gap:.5rem; flex-wrap:wrap; margin: 1rem 0; }
-    .form-control{ max-width:420px; min-width:260px; padding:.5rem .75rem; border:1px solid var(--border); border-radius:.5rem; }
-    .btn-outline{ border:1px solid var(--border); background:#fff; color:var(--text); padding:.5rem .75rem; border-radius:.5rem; font-weight:700; cursor:pointer; }
-    .btn-outline:hover{ background:#F8FAFC; }
-    .btn-gold{ background:var(--pg-gold); color:#111; border:0; padding:.5rem .75rem; border-radius:.5rem; font-weight:800; cursor:pointer; }
+      <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin: 1rem 0;">
+        <button id="exitPractice" type="button" title="Back to list"
+                style="border:1px solid #E2E8F0; background:#ffffff; color:#0F172A; padding:.5rem .75rem; border-radius:.5rem; font-weight:700; cursor:pointer;">
+          Exit Practice
+        </button>
+      </div>
 
-    /* Term list cards (styled like FAQ accordion items) */
-    .term-list{ display:grid; gap:.75rem; }
-    .term{
-      border:1px solid var(--border);
-      border-left:4px solid var(--pg-gold);
-      border-radius:.75rem; box-shadow:var(--shadow); background:#fff; overflow:hidden; padding:1rem 1.25rem;
-    }
-    .term h2{ margin:0 0 .35rem; font-size:1.1rem; color:#111; }
-    .term p{ margin:0; }
+      <div aria-label="Practice panel"
+           style="border:1px solid #E2E8F0; border-left:4px solid #CFB991; border-radius:.75rem; background:#ffffff; padding:1rem 1.25rem; box-shadow:0 .25rem .75rem rgba(0,0,0,.06);">
+        <!-- Question block -->
+        <div id="questionBlock">
+          <div id="defBox" style="margin-bottom:.5rem; font-size:1.05rem;"></div>
 
-    .hidden{ display:none !important; }
-    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+          <div style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">
+            <label for="answer" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">
+              Your answer
+            </label>
+            <select id="answer" style="min-width:260px; max-width:420px; padding:.5rem .75rem; border:1px solid #E2E8F0; border-radius:.5rem;"></select>
+            <button id="checkBtn" type="button"
+                    style="background:#CFB991; color:#111111; border:0; padding:.5rem .75rem; border-radius:.5rem; font-weight:800; cursor:pointer;">
+              Submit
+            </button>
+            <button id="skipBtn" type="button" title="Show answer & next"
+                    style="border:1px solid #E2E8F0; background:#ffffff; color:#0F172A; padding:.5rem .75rem; border-radius:.5rem; font-weight:700; cursor:pointer;">
+              Skip
+            </button>
+            <button id="nextBtn" type="button" title="Next card"
+                    style="display:none; border:1px solid #E2E8F0; background:#ffffff; color:#0F172A; padding:.5rem .75rem; border-radius:.5rem; font-weight:700; cursor:pointer;">
+              Next
+            </button>
+          </div>
 
-    /* Practice panel */
-    .practice .panel{ border:1px solid var(--border); border-left:4px solid var(--pg-gold); border-radius:.75rem; box-shadow:var(--shadow); background:#fff; padding:1rem 1.25rem; }
-    #practiceHeading{ color:#111; }
-    .row{ display:flex; gap:.5rem; flex-wrap:wrap; }
-    select.form-control{ min-width:260px; }
-    .feedback{ margin-top:.5rem; font-weight:800; }
-    .ok{ color:#059669; } .bad{ color:#DC2626;} .muted{ color:#475569; }
+          <div id="feedback" aria-live="polite" style="margin-top:.5rem; font-weight:800;"></div>
 
-    .progress{ height:10px; background: var(--border); border-radius:999px; overflow:hidden; margin-top:12px }
-    .progress>div{ height:100%; background: var(--pg-gold); width:0% }
+          <div aria-label="Progress"
+               style="height:10px; background:#E2E8F0; border-radius:999px; overflow:hidden; margin-top:12px;">
+            <div id="bar" style="height:100%; background:#CFB991; width:0%;"></div>
+          </div>
 
-    footer{ margin:2rem 0 3rem; padding-top:1rem; border-top:1px solid var(--border); color:#6b7280; }
-  </style>
-</head><body><div class="banner-bleed">
-<div class="container">
-<div class="banner" role="heading" aria-level="1"><!-- same circle/question icon as FAQ 
-        <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <circle cx="12" cy="12" r="10" stroke="#ffffff" stroke-width="2" fill="none"></circle>
-          <path d="M9.5 9a2.5 2.5 0 015 0c0 1.6-1.2 2.2-2 2.6-.7.4-1 .7-1 1.9" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
-          <circle cx="12" cy="17.5" r="1.2" fill="#ffffff"></circle>     </svg> -->&nbsp;<span class="title-text" id="pageTitle">Key Terms and Definitions</span></div>
-</div>
-</div>
-<main class="container">
-<p class="page-subtitle">Search, browse, or switch to practice mode.</p>
-<!-- Controls -->
-<div id="toolbar" class="faq-toolbar" role="toolbar" aria-label="Actions"><input id="searchInput" type="search" class="form-control" placeholder="Search term…" aria-label="Search term"> <button id="searchBtn" type="button" class="btn-outline" title="Search for a term">Search</button> <button id="clearSearch" type="button" class="btn-outline hidden" title="Close search and show all terms">Close Search</button> <button id="goPractice" type="button" class="btn-gold" title="Go to Practice Exercises">Practice Exercises</button></div>
-<!-- Screen: LIST -->
-<section id="screen-list">
-<div id="list" class="term-list" aria-live="polite"></div>
-</section>
-<!-- Screen: PRACTICE -->
-<section id="screen-practice" class="hidden practice" aria-labelledby="practiceHeading">
-<h2 id="practiceHeading" class="muted" style="margin: 10px 0;">Practice Exercises</h2>
-<div class="faq-toolbar"><button id="exitPractice" type="button" class="btn-outline" title="Back to list">Exit Practice</button></div>
-<div class="panel" aria-label="Practice panel">
-<div id="questionBlock">
-<div id="defBox" class="def"></div>
-<div class="row"><label for="answer" class="sr-only">Your answer</label><select id="answer" class="form-control"></select><button id="checkBtn" type="button" class="btn-gold">Submit</button> <button id="skipBtn" type="button" class="btn-outline" title="Show answer &amp; next">Skip</button> <button id="nextBtn" type="button" class="btn-outline hidden" title="Next card">Next</button></div>
-<div id="feedback" class="feedback" aria-live="polite"></div>
-<div class="progress" aria-label="Progress">
-<div id="bar"></div>
-</div>
-<p id="counter" class="muted" style="margin: 8px 0 0;"></p>
-</div>
-<div id="resultsBlock" class="hidden" aria-live="polite">
-<h3 style="margin: 0 0 8px; color: #111;">Results</h3>
-<p id="scoreText" class="feedback"></p>
-<div class="faq-toolbar"><button id="tryAgainBtn" type="button" class="btn-gold">Try Again</button> <!--  <button id="exitBtn" type="button" class="btn-outline">Exit Practice</button> --></div>
-</div>
-</div>
-</section>
-<footer></footer></main>
-<p><script>
-  (function(){
-    // ---- Data (sample) ----
-    var terms = [
-      { term: 'Data Flow Diagram (DFD)', def: 'Visualizes how data moves through processes, data stores, and external entities.' },
-      { term: 'Entity-Relationship Diagram (ERD)', def: 'A data model showing entities, attributes, and relationships; foundation for database design.' },
-      { term: 'Feasibility Analysis', def: 'Early assessment of project viability across Technical, Economic, Legal, Operational, and Schedule factors (TELOS).' },
-      { term: 'Functional Requirement', def: 'What the system must do—features and behaviors that deliver capabilities to users.' },
-      { term: 'Nonfunctional Requirement', def: 'Quality attributes specifying how well the system works (e.g., performance, security, usability, reliability).' },
-      { term: 'Requirement', def: 'A verifiable statement of need the system must satisfy; guides scope, design, and testing.' },
-      { term: 'SDLC (Systems Development Life Cycle)', def: 'Structured phases for building systems: planning, analysis, design, implementation, testing, deployment, maintenance.' },
-      { term: 'Stakeholder', def: 'Anyone who influences, uses, or is affected by the system.' },
-      { term: 'System', def: 'Interrelated components working together within a boundary to achieve a purpose.' },
-      { term: 'Use Case', def: 'A scenario of how an actor interacts with the system to achieve a goal, including normal and alternate flows.' }
-    ];
+          <p id="counter" style="margin: 8px 0 0; color:#475569;"></p>
+        </div>
 
-    // Start sorted A→Z
-    terms.sort(function(a,b){ return a.term.localeCompare(b.term); });
+        <!-- Results block -->
+        <div id="resultsBlock" aria-live="polite" style="display:none; margin-top:10px;">
+          <h3 style="margin:0 0 8px; color:#111111;">Results</h3>
+          <p id="scoreText" style="margin:0 0 10px; font-weight:800;"></p>
+          <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin: 1rem 0;">
+            <button id="tryAgainBtn" type="button"
+                    style="background:#CFB991; color:#111111; border:0; padding:.5rem .75rem; border-radius:.5rem; font-weight:800; cursor:pointer;">
+              Try Again
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    // Elements
-    var pageTitle   = document.getElementById('pageTitle');
-    var listEl      = document.getElementById('list');
-    var searchInput = document.getElementById('searchInput');
-    var searchBtn   = document.getElementById('searchBtn');
-    var clearBtn    = document.getElementById('clearSearch');
-    var toolbar     = document.getElementById('toolbar');
-    var practiceBtn = document.getElementById('goPractice');
-    var screenList  = document.getElementById('screen-list');
-    var screenPractice = document.getElementById('screen-practice');
-    var exitPracticeBtn= document.getElementById('exitPractice');
+    <footer style="margin:2rem 0 3rem; padding-top:1rem; border-top:1px solid #E2E8F0; color:#6b7280;"></footer>
+  </main>
 
-    var defBox   = document.getElementById('defBox');
-    var sel      = document.getElementById('answer');
-    var checkBtn = document.getElementById('checkBtn');
-    var skipBtn  = document.getElementById('skipBtn');
-    var nextBtn  = document.getElementById('nextBtn');
-    var feedback = document.getElementById('feedback');
-    var bar      = document.getElementById('bar');
-    var counter  = document.getElementById('counter');
+  <script>
+    (function(){
+      // ---------- Data ----------
+      var terms = [
+        { term: 'Data Flow Diagram (DFD)', def: 'Visualizes how data moves through processes, data stores, and external entities.' },
+        { term: 'Entity-Relationship Diagram (ERD)', def: 'A data model showing entities, attributes, and relationships; foundation for database design.' },
+        { term: 'Feasibility Analysis', def: 'Early assessment of project viability across Technical, Economic, Legal, Operational, and Schedule factors (TELOS).' },
+        { term: 'Functional Requirement', def: 'What the system must do—features and behaviors that deliver capabilities to users.' },
+        { term: 'Nonfunctional Requirement', def: 'Quality attributes specifying how well the system works (e.g., performance, security, usability, reliability).' },
+        { term: 'Requirement', def: 'A verifiable statement of need the system must satisfy; guides scope, design, and testing.' },
+        { term: 'SDLC (Systems Development Life Cycle)', def: 'Structured phases for building systems: planning, analysis, design, implementation, testing, deployment, maintenance.' },
+        { term: 'Stakeholder', def: 'Anyone who influences, uses, or is affected by the system.' },
+        { term: 'System', def: 'Interrelated components working together within a boundary to achieve a purpose.' },
+        { term: 'Use Case', def: 'A scenario of how an actor interacts with the system to achieve a goal, including normal and alternate flows.' }
+      ];
+      terms.sort(function(a,b){ return a.term.localeCompare(b.term); });
 
-    var questionBlock = document.getElementById('questionBlock');
-    var resultsBlock  = document.getElementById('resultsBlock');
-    var scoreText     = document.getElementById('scoreText');
-    var tryAgainBtn   = document.getElementById('tryAgainBtn');
-    var exitBtn       = document.getElementById('exitBtn');
+      // ---------- Elements ----------
+      var pageTitle   = document.getElementById('pageTitle');
+      var listEl      = document.getElementById('list');
+      var searchInput = document.getElementById('searchInput');
+      var searchBtn   = document.getElementById('searchBtn');
+      var clearBtn    = document.getElementById('clearSearch');
+      var toolbar     = document.getElementById('toolbar');
 
-    // State
-    var filterText=''; var deck=[]; var idx=0; var correctCount=0; var answered=false;
+      var screenList      = document.getElementById('screen-list');
+      var screenPractice  = document.getElementById('screen-practice');
+      var exitPracticeBtn = document.getElementById('exitPractice');
+      var practiceBtn     = document.getElementById('goPractice');
 
-    // Helpers
-    function trimLower(s){ return String(s||'').toLowerCase().replace(/^\s+|\s+$/g,''); }
-    function normalize(s){ return String(s).toLowerCase().replace(/\s+/g,' ').replace(/^\s+|\s+$/g,''); }
-    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function shuffle(arr){ for(var j=arr.length-1;j>0;j--){ var k=Math.floor(Math.random()*(j+1)); var t=arr[j]; arr[j]=arr[k]; arr[k]=t; } return arr; }
+      var defBox   = document.getElementById('defBox');
+      var sel      = document.getElementById('answer');
+      var checkBtn = document.getElementById('checkBtn');
+      var skipBtn  = document.getElementById('skipBtn');
+      var nextBtn  = document.getElementById('nextBtn');
+      var feedback = document.getElementById('feedback');
+      var bar      = document.getElementById('bar');
+      var counter  = document.getElementById('counter');
 
-    // List render/search
-    function renderList(){
-      listEl.innerHTML='';
-      var filtered = terms.filter(function(item){ return !filterText || item.term.toLowerCase().indexOf(filterText)!==-1; });
-      if(!filtered.length){ var d=document.createElement('div'); d.className='term'; d.textContent='No terms found.'; listEl.appendChild(d); return; }
-      for(var i=0;i<filtered.length;i++){ var t=filtered[i]; var a=document.createElement('article'); a.className='term'; var h2=document.createElement('h2'); h2.textContent=t.term; var p=document.createElement('p'); p.textContent=t.def; a.appendChild(h2); a.appendChild(p); listEl.appendChild(a);}
-    }
-    function doSearch(){ filterText=trimLower(searchInput.value); if(filterText){ clearBtn.classList.remove('hidden'); } else { clearBtn.classList.add('hidden'); } renderList(); }
-    function resetSearch(){ filterText=''; searchInput.value=''; clearBtn.classList.add('hidden'); renderList(); }
+      var questionBlock = document.getElementById('questionBlock');
+      var resultsBlock  = document.getElementById('resultsBlock');
+      var scoreText     = document.getElementById('scoreText');
+      var tryAgainBtn   = document.getElementById('tryAgainBtn');
 
-    if(searchBtn) searchBtn.addEventListener('click', doSearch);
-    if(clearBtn) clearBtn.addEventListener('click', resetSearch);
-    if(searchInput){ searchInput.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doSearch(); } if(e.key==='Escape'){ e.preventDefault(); resetSearch(); this.blur(); } }); searchInput.addEventListener('blur', function(){ if(trimLower(this.value)===''){ resetSearch(); } }); }
+      // ---------- Helpers (no CSS classes; inline style only) ----------
+      function show(el, display) { el.style.display = display || ''; }
+      function hide(el)          { el.style.display = 'none'; }
 
-    // Practice nav
-    if(practiceBtn) practiceBtn.addEventListener('click', function(){ pageTitle.textContent='Practice Exercises'; screenList.classList.add('hidden'); screenPractice.classList.remove('hidden'); toolbar.classList.add('hidden'); startPractice(); });
-    if(exitPracticeBtn) exitPracticeBtn.addEventListener('click', function(){ pageTitle.textContent='Key Terms and Definitions'; screenPractice.classList.add('hidden'); screenList.classList.remove('hidden'); toolbar.classList.remove('hidden'); });
+      function trimLower(s){ return String(s||'').toLowerCase().replace(/^\\s+|\\s+$/g,''); }
+      function normalize(s){ return String(s).toLowerCase().replace(/\\s+/g,' ').replace(/^\\s+|\\s+$/g,''); }
+      function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      function shuffle(arr){ for(var j=arr.length-1;j>0;j--){ var k=Math.floor(Math.random()*(j+1)); var t=arr[j]; arr[j]=arr[k]; arr[k]=t; } return arr; }
 
-    // Practice logic
-    function setupDropdown(){ var opts=terms.slice(); sel.innerHTML=''; var ph=document.createElement('option'); ph.value=''; ph.textContent='— choose a term —'; ph.disabled=true; ph.selected=true; ph.hidden=true; sel.appendChild(ph); for(var i=0;i<opts.length;i++){ var op=document.createElement('option'); op.value=opts[i].term; op.textContent=opts[i].term; sel.appendChild(op);} }
-    function startPractice(){ deck=shuffle(terms.slice()); idx=0; correctCount=0; answered=false; setupDropdown(); showCard(); questionBlock.classList.remove('hidden'); resultsBlock.classList.add('hidden'); sel.focus(); }
-    function showCard(){ if(!deck.length){ defBox.textContent='No cards available.'; return; } var cur=deck[idx]; defBox.textContent=cur.def; sel.value=''; feedback.textContent=''; nextBtn.classList.add('hidden'); answered=false; updateProgress(); }
-    function check(){ var cur=deck[idx]; var choice=sel.value||''; if(!choice){ feedback.textContent='Please select an answer.'; feedback.className='feedback'; return; } if(answered) return; var correct=normalize(choice)===normalize(cur.term); if(correct) correctCount++; answered=true; feedback.innerHTML= correct ? '✅ <span class=\"ok\">Correct!</span> — <em>'+escapeHtml(cur.term)+'</em>' : '❌ <span class=\"bad\">Not quite.</span> Correct answer: <em>'+escapeHtml(cur.term)+'</em>'; nextBtn.classList.remove('hidden'); nextBtn.focus(); }
-    function next(){ if(idx<deck.length-1){ idx++; showCard(); sel.focus(); } else { showResults(); } }
-    function skip(){ if(!answered){ answered=true; } feedback.innerHTML='ℹ️ Correct answer: <em>'+escapeHtml(deck[idx].term)+'</em>'; nextBtn.classList.remove('hidden'); nextBtn.focus(); }
-    function showResults(){ var total=deck.length; var pct=Math.round((correctCount/Math.max(total,1))*100); scoreText.innerHTML='You scored <strong>'+correctCount+'</strong> out of <strong>'+total+'</strong> ('+pct+'%).'; questionBlock.classList.add('hidden'); resultsBlock.classList.remove('hidden'); bar.style.width='100%'; counter.textContent='Complete'; if(tryAgainBtn) tryAgainBtn.focus(); }
-    function updateProgress(){ var pct=(idx/Math.max(deck.length,1))*100; bar.style.width=pct.toFixed(1)+'%'; counter.textContent=(idx+1)+' of '+deck.length; }
+      // ---------- List render/search ----------
+      function renderList(){
+        listEl.innerHTML = '';
+        var filterText = trimLower(searchInput.value);
+        var filtered = terms.filter(function(item){
+          return !filterText || item.term.toLowerCase().indexOf(filterText) !== -1;
+        });
 
-    if(checkBtn) checkBtn.addEventListener('click', check);
-    if(nextBtn)  nextBtn.addEventListener('click', next);
-    if(skipBtn)  skipBtn.addEventListener('click', skip);
-    if(sel) sel.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); check(); } });
+        if (!filtered.length){
+          var empty = document.createElement('div');
+          empty.textContent = 'No terms found.';
+          empty.style.border = '1px solid #E2E8F0';
+          empty.style.borderLeft = '4px solid #CFB991';
+          empty.style.borderRadius = '.75rem';
+          empty.style.background = '#ffffff';
+          empty.style.padding = '1rem 1.25rem';
+          empty.style.boxShadow = '0 .25rem .75rem rgba(0,0,0,.06)';
+          listEl.appendChild(empty);
+          return;
+        }
 
-    if(tryAgainBtn) tryAgainBtn.addEventListener('click', startPractice);
-    if(exitBtn) exitBtn.addEventListener('click', function(){ pageTitle.textContent='Key Terms and Definitions'; screenPractice.classList.add('hidden'); screenList.classList.remove('hidden'); toolbar.classList.remove('hidden'); });
+        for (var i=0; i<filtered.length; i++){
+          var t = filtered[i];
 
-    // Initial render
-    renderList();
-  })();
-  </script></p></body></html>
+          var card = document.createElement('article');
+          card.style.border = '1px solid #E2E8F0';
+          card.style.borderLeft = '4px solid #CFB991';
+          card.style.borderRadius = '.75rem';
+          card.style.background = '#ffffff';
+          card.style.padding = '1rem 1.25rem';
+          card.style.boxShadow = '0 .25rem .75rem rgba(0,0,0,.06)';
+
+          var h2 = document.createElement('h2');
+          h2.textContent = t.term;
+          h2.style.margin = '0 0 .35rem';
+          h2.style.fontSize = '1.1rem';
+          h2.style.color = '#111111';
+
+          var p = document.createElement('p');
+          p.textContent = t.def;
+          p.style.margin = '0';
+
+          card.appendChild(h2);
+          card.appendChild(p);
+          listEl.appendChild(card);
+        }
+      }
+
+      function doSearch(){
+        if (trimLower(searchInput.value)) { show(clearBtn, ''); }
+        else { hide(clearBtn); }
+        renderList();
+      }
+      function resetSearch(){
+        searchInput.value = '';
+        hide(clearBtn);
+        renderList();
+      }
+
+      // ---------- Practice mode ----------
+      var deck = [], idx = 0, correctCount = 0, answered = false;
+
+      function setupDropdown(){
+        sel.innerHTML = '';
+        var ph = document.createElement('option');
+        ph.value = '';
+        ph.textContent = '— choose a term —';
+        ph.disabled = true; ph.selected = true; ph.hidden = true;
+        sel.appendChild(ph);
+
+        for (var i=0; i<terms.length; i++){
+          var op = document.createElement('option');
+          op.value = terms[i].term;
+          op.textContent = terms[i].term;
+          sel.appendChild(op);
+        }
+      }
+
+      function startPractice(){
+        deck = shuffle(terms.slice());
+        idx = 0; correctCount = 0; answered = false;
+        setupDropdown();
+        showCard();
+        show(questionBlock); hide(resultsBlock);
+        sel.focus();
+      }
+
+      function showCard(){
+        if (!deck.length){ defBox.textContent = 'No cards available.'; return; }
+        var cur = deck[idx];
+        defBox.textContent = cur.def;
+        sel.value = '';
+        feedback.innerHTML = '';
+        hide(nextBtn);
+        answered = false;
+        updateProgress();
+      }
+
+      function check(){
+        var cur = deck[idx];
+        var choice = sel.value || '';
+        if (!choice){
+          feedback.textContent = 'Please select an answer.';
+          feedback.style.color = '#0F172A';
+          return;
+        }
+        if (answered) return;
+
+        var correct = normalize(choice) === normalize(cur.term);
+        if (correct) correctCount++;
+        answered = true;
+
+        if (correct){
+          feedback.innerHTML = '✅ <span style="color:#059669;">Correct!</span> — <em>' + escapeHtml(cur.term) + '</em>';
+        } else {
+          feedback.innerHTML = '❌ <span style="color:#DC2626;">Not quite.</span> Correct answer: <em>' + escapeHtml(cur.term) + '</em>';
+        }
+        show(nextBtn, '');
+        nextBtn.focus();
+      }
+
+      function next(){
+        if (idx < deck.length - 1){
+          idx++;
+          showCard();
+          sel.focus();
+        } else {
+          showResults();
+        }
+      }
+
+      function skip(){
+        if (!answered){ answered = true; }
+        feedback.innerHTML = 'ℹ️ Correct answer: <em>' + escapeHtml(deck[idx].term) + '</em>';
+        show(nextBtn, '');
+        nextBtn.focus();
+      }
+
+      function showResults(){
+        var total = deck.length;
+        var pct = Math.round((correctCount / Math.max(total,1)) * 100);
+        scoreText.innerHTML = 'You scored <strong>' + correctCount + '</strong> out of <strong>' + total + '</strong> (' + pct + '%).';
+        hide(questionBlock); show(resultsBlock, '');
+        bar.style.width = '100%';
+        counter.textContent = 'Complete';
+        tryAgainBtn.focus();
+      }
+
+      function updateProgress(){
+        var pct = (idx / Math.max(deck.length,1)) * 100;
+        bar.style.width = pct.toFixed(1) + '%';
+        counter.textContent = (idx + 1) + ' of ' + deck.length;
+      }
+
+      // ---------- Events ----------
+      renderList();
+
+      if (searchBtn)  searchBtn.addEventListener('click', doSearch);
+      if (clearBtn)   clearBtn.addEventListener('click', resetSearch);
+      if (searchInput){
+        searchInput.addEventListener('keydown', function(e){
+          if (e.key === 'Enter'){ e.preventDefault(); doSearch(); }
+          if (e.key === 'Escape'){ e.preventDefault(); resetSearch(); this.blur(); }
+        });
+        searchInput.addEventListener('blur', function(){
+          if (!trimLower(this.value)) resetSearch();
+        });
+      }
+
+      if (practiceBtn){
+        practiceBtn.addEventListener('click', function(){
+          pageTitle.textContent = 'Practice Exercises';
+          hide(screenList); show(screenPractice, '');
+          hide(toolbar);
+          startPractice();
+        });
+      }
+      if (exitPracticeBtn){
+        exitPracticeBtn.addEventListener('click', function(){
+          pageTitle.textContent = 'Key Terms and Definitions';
+          hide(screenPractice); show(screenList, '');
+          show(toolbar, '');
+        });
+      }
+
+      if (checkBtn) checkBtn.addEventListener('click', check);
+      if (nextBtn)  nextBtn.addEventListener('click', next);
+      if (skipBtn)  skipBtn.addEventListener('click', skip);
+
+      if (sel){
+        sel.addEventListener('keydown', function(e){
+          if (e.key === 'Enter'){ e.preventDefault(); check(); }
+        });
+      }
+
+      if (tryAgainBtn) tryAgainBtn.addEventListener('click', startPractice);
+    })();
+  </script>
+</body>
+</html>
