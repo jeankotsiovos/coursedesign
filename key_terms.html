@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Terms and Definitions — List + Separate Practice</title>
+
+  <!-- Match FAQ typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&amp;display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== Match FAQ.html palette & components ===== */
+    :root{
+      --pg-gold:#CFB991;        /* Boilermaker Gold */
+      --pg-steel:#555960;       /* Dark banner */
+      --surface:#F7F1E5;        /* light gold tint */
+      --surface-hover:#EFE6D4;  /* hover tint */
+      --border:#E2E8F0;
+      --text:#0F172A;
+      --shadow:0 .25rem .75rem rgba(0,0,0,.06);
+    }
+
+    body{ font-family:'Lato', Arial, sans-serif; color:var(--text); line-height:1.7; font-size:1.05rem; background:#fff; margin:0; }
+    .container{ width:100%; max-width:1140px; margin:0 auto; padding-left:8px; padding-right:8px; }
+
+    /* Header banner (same as FAQ) */
+    .banner-bleed{ background:var(--pg-steel); color:#fff; }
+    .banner{ display:flex; width:100%; align-items:center; gap:.4rem; padding:.55rem 0; margin:0; text-transform:uppercase; letter-spacing:.06em; font-weight:800; }
+    .banner .faq-icon{ width:20px; height:20px; flex:0 0 auto; }
+    .banner .title-text{ font-size:1.5rem; }
+    @media (min-width:768px){ .banner .title-text{ font-size:1.7rem; } }
+
+    .page-subtitle{ color:#475569; margin:1rem 0 1.25rem; }
+
+    /* Controls (mirrors FAQ toolbar) */
+    .faq-toolbar{ display:flex; gap:.5rem; flex-wrap:wrap; margin: 1rem 0; }
+    .form-control{ max-width:420px; min-width:260px; padding:.5rem .75rem; border:1px solid var(--border); border-radius:.5rem; }
+    .btn-outline{ border:1px solid var(--border); background:#fff; color:var(--text); padding:.5rem .75rem; border-radius:.5rem; font-weight:700; cursor:pointer; }
+    .btn-outline:hover{ background:#F8FAFC; }
+    .btn-gold{ background:var(--pg-gold); color:#111; border:0; padding:.5rem .75rem; border-radius:.5rem; font-weight:800; cursor:pointer; }
+
+    /* Term list cards (styled like FAQ accordion items) */
+    .term-list{ display:grid; gap:.75rem; }
+    .term{
+      border:1px solid var(--border);
+      border-left:4px solid var(--pg-gold);
+      border-radius:.75rem; box-shadow:var(--shadow); background:#fff; overflow:hidden; padding:1rem 1.25rem;
+    }
+    .term h2{ margin:0 0 .35rem; font-size:1.1rem; color:#111; }
+    .term p{ margin:0; }
+
+    .hidden{ display:none !important; }
+    .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+    /* Practice panel */
+    .practice .panel{ border:1px solid var(--border); border-left:4px solid var(--pg-gold); border-radius:.75rem; box-shadow:var(--shadow); background:#fff; padding:1rem 1.25rem; }
+    #practiceHeading{ color:#111; }
+    .row{ display:flex; gap:.5rem; flex-wrap:wrap; }
+    select.form-control{ min-width:260px; }
+    .feedback{ margin-top:.5rem; font-weight:800; }
+    .ok{ color:#059669; } .bad{ color:#DC2626;} .muted{ color:#475569; }
+
+    .progress{ height:10px; background: var(--border); border-radius:999px; overflow:hidden; margin-top:12px }
+    .progress>div{ height:100%; background: var(--pg-gold); width:0% }
+
+    footer{ margin:2rem 0 3rem; padding-top:1rem; border-top:1px solid var(--border); color:#6b7280; }
+  </style>
+</head><body><div class="banner-bleed">
+<div class="container">
+<div class="banner" role="heading" aria-level="1"><!-- same circle/question icon as FAQ 
+        <svg xmlns="http://www.w3.org/2000/svg" class="faq-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="10" stroke="#ffffff" stroke-width="2" fill="none"></circle>
+          <path d="M9.5 9a2.5 2.5 0 015 0c0 1.6-1.2 2.2-2 2.6-.7.4-1 .7-1 1.9" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="12" cy="17.5" r="1.2" fill="#ffffff"></circle>     </svg> -->&nbsp;<span class="title-text" id="pageTitle">Key Terms and Definitions</span></div>
+</div>
+</div>
+<main class="container">
+<p class="page-subtitle">Search, browse, or switch to practice mode.</p>
+<!-- Controls -->
+<div id="toolbar" class="faq-toolbar" role="toolbar" aria-label="Actions"><input id="searchInput" type="search" class="form-control" placeholder="Search term…" aria-label="Search term"> <button id="searchBtn" type="button" class="btn-outline" title="Search for a term">Search</button> <button id="clearSearch" type="button" class="btn-outline hidden" title="Close search and show all terms">Close Search</button> <button id="goPractice" type="button" class="btn-gold" title="Go to Practice Exercises">Practice Exercises</button></div>
+<!-- Screen: LIST -->
+<section id="screen-list">
+<div id="list" class="term-list" aria-live="polite"></div>
+</section>
+<!-- Screen: PRACTICE -->
+<section id="screen-practice" class="hidden practice" aria-labelledby="practiceHeading">
+<h2 id="practiceHeading" class="muted" style="margin: 10px 0;">Practice Exercises</h2>
+<div class="faq-toolbar"><button id="exitPractice" type="button" class="btn-outline" title="Back to list">Exit Practice</button></div>
+<div class="panel" aria-label="Practice panel">
+<div id="questionBlock">
+<div id="defBox" class="def"></div>
+<div class="row"><label for="answer" class="sr-only">Your answer</label><select id="answer" class="form-control"></select><button id="checkBtn" type="button" class="btn-gold">Submit</button> <button id="skipBtn" type="button" class="btn-outline" title="Show answer &amp; next">Skip</button> <button id="nextBtn" type="button" class="btn-outline hidden" title="Next card">Next</button></div>
+<div id="feedback" class="feedback" aria-live="polite"></div>
+<div class="progress" aria-label="Progress">
+<div id="bar"></div>
+</div>
+<p id="counter" class="muted" style="margin: 8px 0 0;"></p>
+</div>
+<div id="resultsBlock" class="hidden" aria-live="polite">
+<h3 style="margin: 0 0 8px; color: #111;">Results</h3>
+<p id="scoreText" class="feedback"></p>
+<div class="faq-toolbar"><button id="tryAgainBtn" type="button" class="btn-gold">Try Again</button> <!--  <button id="exitBtn" type="button" class="btn-outline">Exit Practice</button> --></div>
+</div>
+</div>
+</section>
+<footer></footer></main>
+<p><script>
+  (function(){
+    // ---- Data (sample) ----
+    var terms = [
+      { term: 'Data Flow Diagram (DFD)', def: 'Visualizes how data moves through processes, data stores, and external entities.' },
+      { term: 'Entity-Relationship Diagram (ERD)', def: 'A data model showing entities, attributes, and relationships; foundation for database design.' },
+      { term: 'Feasibility Analysis', def: 'Early assessment of project viability across Technical, Economic, Legal, Operational, and Schedule factors (TELOS).' },
+      { term: 'Functional Requirement', def: 'What the system must do—features and behaviors that deliver capabilities to users.' },
+      { term: 'Nonfunctional Requirement', def: 'Quality attributes specifying how well the system works (e.g., performance, security, usability, reliability).' },
+      { term: 'Requirement', def: 'A verifiable statement of need the system must satisfy; guides scope, design, and testing.' },
+      { term: 'SDLC (Systems Development Life Cycle)', def: 'Structured phases for building systems: planning, analysis, design, implementation, testing, deployment, maintenance.' },
+      { term: 'Stakeholder', def: 'Anyone who influences, uses, or is affected by the system.' },
+      { term: 'System', def: 'Interrelated components working together within a boundary to achieve a purpose.' },
+      { term: 'Use Case', def: 'A scenario of how an actor interacts with the system to achieve a goal, including normal and alternate flows.' }
+    ];
+
+    // Start sorted A→Z
+    terms.sort(function(a,b){ return a.term.localeCompare(b.term); });
+
+    // Elements
+    var pageTitle   = document.getElementById('pageTitle');
+    var listEl      = document.getElementById('list');
+    var searchInput = document.getElementById('searchInput');
+    var searchBtn   = document.getElementById('searchBtn');
+    var clearBtn    = document.getElementById('clearSearch');
+    var toolbar     = document.getElementById('toolbar');
+    var practiceBtn = document.getElementById('goPractice');
+    var screenList  = document.getElementById('screen-list');
+    var screenPractice = document.getElementById('screen-practice');
+    var exitPracticeBtn= document.getElementById('exitPractice');
+
+    var defBox   = document.getElementById('defBox');
+    var sel      = document.getElementById('answer');
+    var checkBtn = document.getElementById('checkBtn');
+    var skipBtn  = document.getElementById('skipBtn');
+    var nextBtn  = document.getElementById('nextBtn');
+    var feedback = document.getElementById('feedback');
+    var bar      = document.getElementById('bar');
+    var counter  = document.getElementById('counter');
+
+    var questionBlock = document.getElementById('questionBlock');
+    var resultsBlock  = document.getElementById('resultsBlock');
+    var scoreText     = document.getElementById('scoreText');
+    var tryAgainBtn   = document.getElementById('tryAgainBtn');
+    var exitBtn       = document.getElementById('exitBtn');
+
+    // State
+    var filterText=''; var deck=[]; var idx=0; var correctCount=0; var answered=false;
+
+    // Helpers
+    function trimLower(s){ return String(s||'').toLowerCase().replace(/^\s+|\s+$/g,''); }
+    function normalize(s){ return String(s).toLowerCase().replace(/\s+/g,' ').replace(/^\s+|\s+$/g,''); }
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function shuffle(arr){ for(var j=arr.length-1;j>0;j--){ var k=Math.floor(Math.random()*(j+1)); var t=arr[j]; arr[j]=arr[k]; arr[k]=t; } return arr; }
+
+    // List render/search
+    function renderList(){
+      listEl.innerHTML='';
+      var filtered = terms.filter(function(item){ return !filterText || item.term.toLowerCase().indexOf(filterText)!==-1; });
+      if(!filtered.length){ var d=document.createElement('div'); d.className='term'; d.textContent='No terms found.'; listEl.appendChild(d); return; }
+      for(var i=0;i<filtered.length;i++){ var t=filtered[i]; var a=document.createElement('article'); a.className='term'; var h2=document.createElement('h2'); h2.textContent=t.term; var p=document.createElement('p'); p.textContent=t.def; a.appendChild(h2); a.appendChild(p); listEl.appendChild(a);}
+    }
+    function doSearch(){ filterText=trimLower(searchInput.value); if(filterText){ clearBtn.classList.remove('hidden'); } else { clearBtn.classList.add('hidden'); } renderList(); }
+    function resetSearch(){ filterText=''; searchInput.value=''; clearBtn.classList.add('hidden'); renderList(); }
+
+    if(searchBtn) searchBtn.addEventListener('click', doSearch);
+    if(clearBtn) clearBtn.addEventListener('click', resetSearch);
+    if(searchInput){ searchInput.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); doSearch(); } if(e.key==='Escape'){ e.preventDefault(); resetSearch(); this.blur(); } }); searchInput.addEventListener('blur', function(){ if(trimLower(this.value)===''){ resetSearch(); } }); }
+
+    // Practice nav
+    if(practiceBtn) practiceBtn.addEventListener('click', function(){ pageTitle.textContent='Practice Exercises'; screenList.classList.add('hidden'); screenPractice.classList.remove('hidden'); toolbar.classList.add('hidden'); startPractice(); });
+    if(exitPracticeBtn) exitPracticeBtn.addEventListener('click', function(){ pageTitle.textContent='Key Terms and Definitions'; screenPractice.classList.add('hidden'); screenList.classList.remove('hidden'); toolbar.classList.remove('hidden'); });
+
+    // Practice logic
+    function setupDropdown(){ var opts=terms.slice(); sel.innerHTML=''; var ph=document.createElement('option'); ph.value=''; ph.textContent='— choose a term —'; ph.disabled=true; ph.selected=true; ph.hidden=true; sel.appendChild(ph); for(var i=0;i<opts.length;i++){ var op=document.createElement('option'); op.value=opts[i].term; op.textContent=opts[i].term; sel.appendChild(op);} }
+    function startPractice(){ deck=shuffle(terms.slice()); idx=0; correctCount=0; answered=false; setupDropdown(); showCard(); questionBlock.classList.remove('hidden'); resultsBlock.classList.add('hidden'); sel.focus(); }
+    function showCard(){ if(!deck.length){ defBox.textContent='No cards available.'; return; } var cur=deck[idx]; defBox.textContent=cur.def; sel.value=''; feedback.textContent=''; nextBtn.classList.add('hidden'); answered=false; updateProgress(); }
+    function check(){ var cur=deck[idx]; var choice=sel.value||''; if(!choice){ feedback.textContent='Please select an answer.'; feedback.className='feedback'; return; } if(answered) return; var correct=normalize(choice)===normalize(cur.term); if(correct) correctCount++; answered=true; feedback.innerHTML= correct ? '✅ <span class=\"ok\">Correct!</span> — <em>'+escapeHtml(cur.term)+'</em>' : '❌ <span class=\"bad\">Not quite.</span> Correct answer: <em>'+escapeHtml(cur.term)+'</em>'; nextBtn.classList.remove('hidden'); nextBtn.focus(); }
+    function next(){ if(idx<deck.length-1){ idx++; showCard(); sel.focus(); } else { showResults(); } }
+    function skip(){ if(!answered){ answered=true; } feedback.innerHTML='ℹ️ Correct answer: <em>'+escapeHtml(deck[idx].term)+'</em>'; nextBtn.classList.remove('hidden'); nextBtn.focus(); }
+    function showResults(){ var total=deck.length; var pct=Math.round((correctCount/Math.max(total,1))*100); scoreText.innerHTML='You scored <strong>'+correctCount+'</strong> out of <strong>'+total+'</strong> ('+pct+'%).'; questionBlock.classList.add('hidden'); resultsBlock.classList.remove('hidden'); bar.style.width='100%'; counter.textContent='Complete'; if(tryAgainBtn) tryAgainBtn.focus(); }
+    function updateProgress(){ var pct=(idx/Math.max(deck.length,1))*100; bar.style.width=pct.toFixed(1)+'%'; counter.textContent=(idx+1)+' of '+deck.length; }
+
+    if(checkBtn) checkBtn.addEventListener('click', check);
+    if(nextBtn)  nextBtn.addEventListener('click', next);
+    if(skipBtn)  skipBtn.addEventListener('click', skip);
+    if(sel) sel.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); check(); } });
+
+    if(tryAgainBtn) tryAgainBtn.addEventListener('click', startPractice);
+    if(exitBtn) exitBtn.addEventListener('click', function(){ pageTitle.textContent='Key Terms and Definitions'; screenPractice.classList.add('hidden'); screenList.classList.remove('hidden'); toolbar.classList.remove('hidden'); });
+
+    // Initial render
+    renderList();
+  })();
+  </script></p></body></html>
